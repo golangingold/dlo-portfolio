@@ -21,6 +21,14 @@ async function getHomeData() {
         include: { category: true },
         orderBy: { sortOrder: "asc" },
         take: 6,
+      }).then(async (featured) => {
+        if (featured.length > 0) return featured;
+        return prisma.photo.findMany({
+          where: { isPublished: true },
+          include: { category: true },
+          orderBy: { sortOrder: "asc" },
+          take: 6,
+        });
       }),
       prisma.demoReel.findFirst({
         where: { isPrimary: true, isPublished: true },

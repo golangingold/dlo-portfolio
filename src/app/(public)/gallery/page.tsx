@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import RevealOnScroll from "@/components/public/RevealOnScroll";
 import GalleryClient from "./GalleryClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
   title: "Gallery | DeAngelo",
   description: "Browse DeAngelo's professional portfolio — headshots, editorial, commercial, and lifestyle photography.",
