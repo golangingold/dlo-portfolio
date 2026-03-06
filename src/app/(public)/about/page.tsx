@@ -4,7 +4,7 @@ import RevealOnScroll from "@/components/public/RevealOnScroll";
 
 export const metadata = {
   title: "About | DeAngelo",
-  description: "Learn more about DeAngelo — model, actor, and creative based in San Francisco.",
+  description: "Learn more about DeAngelo — model and creative based in San Francisco.",
 };
 
 export default async function AboutPage() {

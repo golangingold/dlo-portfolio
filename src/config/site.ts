@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "DeAngelo",
-  tagline: "Model & Actor",
+  tagline: "Model",
   description:
-    "DeAngelo — Professional model and actor based in San Francisco. Available for commercial, editorial, film, and runway work.",
+    "DeAngelo — Professional model based in San Francisco. Available for commercial, editorial, and runway work.",
   url: "http://localhost:3000",
   navLinks: [
     { label: "Home", href: "/" },

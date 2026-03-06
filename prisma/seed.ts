@@ -39,10 +39,10 @@ async function main() {
     update: {},
     create: {
       id: "default",
-      headline: "Model. Actor. San Francisco.",
-      bio: "DeAngelo is a professional model and actor based in San Francisco, bringing energy, authenticity, and versatility to every project. With experience spanning commercial, editorial, film, and runway work, DeAngelo brings a unique presence that captivates audiences and elevates brands.",
+      headline: "Model. San Francisco.",
+      bio: "DeAngelo is a professional model based in San Francisco, bringing energy, authenticity, and versatility to every project. With experience spanning commercial, editorial, and runway work, DeAngelo brings a unique presence that captivates audiences and elevates brands.",
       shortBio:
-        "Professional model and actor based in San Francisco. Available for commercial, editorial, film, and runway work.",
+        "Professional model based in San Francisco. Available for commercial, editorial, and runway work.",
       stats: JSON.stringify({
         height: "6'1\"",
         hairColor: "Black",
@@ -69,11 +69,11 @@ async function main() {
     create: {
       id: "default",
       siteName: "DeAngelo",
-      siteTagline: "Model & Actor",
+      siteTagline: "Model",
       metaDescription:
-        "DeAngelo — Professional model and actor based in San Francisco. Available for commercial, editorial, film, and runway work.",
+        "DeAngelo — Professional model based in San Francisco. Available for commercial, editorial, and runway work.",
       heroTitle: "DEANGELO",
-      heroSubtitle: "Model & Actor | San Francisco",
+      heroSubtitle: "Model | San Francisco",
     },
   });
 

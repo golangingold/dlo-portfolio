@@ -50,7 +50,7 @@ export default async function HomePage() {
       {/* Hero Section */}
       <HeroSection
         title={settings?.heroTitle || "DEANGELO"}
-        subtitle={settings?.heroSubtitle || "Model & Actor | San Francisco"}
+        subtitle={settings?.heroSubtitle || "Model | San Francisco"}
         featuredPhoto={featuredPhotos[0]?.url}
         blurDataUrl={featuredPhotos[0]?.blurDataUrl}
       />
@@ -111,7 +111,7 @@ export default async function HomePage() {
                   About
                 </h3>
                 <h2 className="font-display text-3xl md:text-4xl tracking-wider mb-6">
-                  {about.headline || "Model. Actor. San Francisco."}
+                  {about.headline || "Model. San Francisco."}
                 </h2>
                 <p className="text-muted leading-relaxed mb-8">
                   {about.shortBio || about.bio}

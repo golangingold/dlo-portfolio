@@ -59,7 +59,7 @@ export default function HeroSection({
         style={{ y: textY, opacity }}
         className="relative z-10 text-center px-6"
       >
-        <h1 className="font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.2em] text-foreground mb-4 overflow-hidden">
+        <h1 className="font-display text-5xl sm:text-7xl md:text-8xl lg:text-9xl tracking-[0.1em] sm:tracking-[0.2em] text-foreground mb-4 whitespace-nowrap">
           {characters.map((char, i) => (
             <motion.span
               key={i}
