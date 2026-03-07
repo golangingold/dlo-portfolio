@@ -36,7 +36,7 @@ export function EditPhotoForm({ photo, categories }: Props) {
     setSaving(true);
     try {
       const res = await fetch(`/api/photos/${photo.id}`, {
-        method: "PATCH",
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
