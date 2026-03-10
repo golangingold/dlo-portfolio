@@ -40,7 +40,7 @@ export default function HeroSection({
             src={featuredPhoto}
             alt={title}
             fill
-            className="object-cover object-top"
+            className="object-cover object-[center_20%]"
             sizes="100vw"
             priority
             placeholder={blurDataUrl ? "blur" : undefined}
