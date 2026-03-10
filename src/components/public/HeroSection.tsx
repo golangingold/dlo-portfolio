@@ -7,14 +7,12 @@ import { ChevronDown } from "lucide-react";
 
 interface HeroSectionProps {
   title: string;
-  subtitle: string;
   featuredPhoto?: string | null;
   blurDataUrl?: string | null;
 }
 
 export default function HeroSection({
   title,
-  subtitle,
   featuredPhoto,
   blurDataUrl,
 }: HeroSectionProps) {
@@ -77,15 +75,6 @@ export default function HeroSection({
             </motion.span>
           ))}
         </h1>
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.8 }}
-          className="text-muted text-sm sm:text-base tracking-[0.3em] uppercase"
-        >
-          {subtitle}
-        </motion.p>
-
         {/* Gold accent line */}
         <motion.div
           initial={{ scaleX: 0 }}

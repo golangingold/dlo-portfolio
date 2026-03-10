@@ -48,7 +48,6 @@ export default async function HomePage() {
       {/* Hero Section */}
       <HeroSection
         title={settings?.heroTitle || "DEANGELO"}
-        subtitle={settings?.heroSubtitle || "Model | San Francisco"}
         featuredPhoto={heroPhoto?.url}
         blurDataUrl={heroPhoto?.blurDataUrl}
       />

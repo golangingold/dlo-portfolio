@@ -148,16 +148,6 @@ export default function AdminAboutPage() {
             onUpload={(url) => setForm({ ...form, profileImageUrl: url })}
           />
           <div>
-            <label className="block text-sm text-muted mb-1.5">Headline</label>
-            <input
-              type="text"
-              value={form.headline}
-              onChange={(e) => setForm({ ...form, headline: e.target.value })}
-              placeholder="Model. San Francisco."
-              className="w-full bg-surface-light border border-border text-foreground rounded-md px-3 py-2 text-sm focus:outline-none focus:border-accent"
-            />
-          </div>
-          <div>
             <label className="block text-sm text-muted mb-1.5">Short Bio (homepage)</label>
             <textarea
               value={form.shortBio}
