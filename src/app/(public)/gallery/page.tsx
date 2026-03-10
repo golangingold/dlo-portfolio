@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/prisma";
+import { unstable_noStore as noStore } from "next/cache";
 import RevealOnScroll from "@/components/public/RevealOnScroll";
 import GalleryClient from "./GalleryClient";
 
@@ -10,6 +11,7 @@ export const metadata = {
 };
 
 export default async function GalleryPage() {
+  noStore();
   const categories = await prisma.category.findMany({
     orderBy: { sortOrder: "asc" },
   });

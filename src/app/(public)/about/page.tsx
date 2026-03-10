@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
+import { unstable_noStore as noStore } from "next/cache";
 import Image from "next/image";
 import RevealOnScroll from "@/components/public/RevealOnScroll";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "About | DeAngelo",
@@ -8,6 +11,7 @@ export const metadata = {
 };
 
 export default async function AboutPage() {
+  noStore();
   const about = await prisma.about.findUnique({ where: { id: "default" } });
   const contact = await prisma.contactInfo.findUnique({ where: { id: "default" } });
 

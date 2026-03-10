@@ -53,14 +53,15 @@ model Photo {
 }
 
 model About {
-  id              String   @id @default(cuid())
-  headline        String?
-  bio             String
-  shortBio        String?
-  profileImageUrl String?
-  stats           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id               String   @id @default(cuid())
+  headline         String?
+  bio              String
+  shortBio         String?
+  profileImageUrl  String?
+  compCardImageUrl String?
+  stats            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model ResumeEntry {

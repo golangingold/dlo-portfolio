@@ -36,7 +36,7 @@ export async function PUT(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { headline, bio, shortBio, profileImageUrl, stats } = body;
+    const { headline, bio, shortBio, profileImageUrl, compCardImageUrl, stats } = body;
 
     if (!bio) {
       return NextResponse.json(
@@ -45,7 +45,6 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Serialize stats object to JSON string for SQLite storage
     const statsJson = stats ? JSON.stringify(stats) : null;
 
     const about = await prisma.about.upsert({
@@ -55,6 +54,7 @@ export async function PUT(request: NextRequest) {
         bio,
         shortBio: shortBio || null,
         profileImageUrl: profileImageUrl || null,
+        compCardImageUrl: compCardImageUrl || null,
         stats: statsJson,
       },
       create: {
@@ -63,6 +63,7 @@ export async function PUT(request: NextRequest) {
         bio,
         shortBio: shortBio || null,
         profileImageUrl: profileImageUrl || null,
+        compCardImageUrl: compCardImageUrl || null,
         stats: statsJson,
       },
     });
