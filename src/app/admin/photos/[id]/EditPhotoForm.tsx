@@ -119,7 +119,7 @@ export function EditPhotoForm({ photo, categories }: Props) {
                 onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
                 className="w-4 h-4 rounded border-border bg-surface-light text-accent"
               />
-              <span className="text-sm text-foreground">Featured</span>
+              <span className="text-sm text-foreground">Show on Home Page</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input

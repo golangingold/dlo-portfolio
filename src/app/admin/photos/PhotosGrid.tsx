@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { Star, GripVertical, ImageOff, Plus, Loader2, Check } from "lucide-react";
+import { House, GripVertical, ImageOff, Plus, Loader2, Check } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -32,7 +32,13 @@ interface Photo {
   category: { name: string };
 }
 
-function SortablePhoto({ photo }: { photo: Photo }) {
+function SortablePhoto({
+  photo,
+  onToggleHomePage,
+}: {
+  photo: Photo;
+  onToggleHomePage: (id: string) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: photo.id });
 
@@ -58,8 +64,8 @@ function SortablePhoto({ photo }: { photo: Photo }) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
           {photo.isFeatured && (
-            <div className="absolute top-2 right-2 bg-accent/90 rounded-full p-1">
-              <Star className="w-3 h-3 text-background fill-background" />
+            <div className="absolute top-2 right-2 bg-accent/90 rounded-full p-1" title="Shown on home page">
+              <House className="w-3 h-3 text-background fill-background" />
             </div>
           )}
           {!photo.isPublished && (
@@ -94,6 +100,17 @@ function SortablePhoto({ photo }: { photo: Photo }) {
           >
             Edit
           </Link>
+          <button
+            onClick={() => onToggleHomePage(photo.id)}
+            className={`text-xs transition-colors ${
+              photo.isFeatured
+                ? "text-accent hover:text-accent-light"
+                : "text-dim hover:text-muted"
+            }`}
+            title={photo.isFeatured ? "Remove from home page" : "Add to home page"}
+          >
+            {photo.isFeatured ? "On Home" : "+ Home"}
+          </button>
           <DeletePhotoButton photoId={photo.id} photoTitle={photo.title} />
         </div>
       </div>
@@ -140,6 +157,33 @@ export default function PhotosGrid({ initialPhotos }: { initialPhotos: Photo[] }
     [photos]
   );
 
+  const handleToggleHomePage = useCallback(
+    async (id: string) => {
+      const photo = photos.find((p) => p.id === id);
+      if (!photo) return;
+      const newValue = !photo.isFeatured;
+
+      // Optimistic update
+      setPhotos((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, isFeatured: newValue } : p))
+      );
+
+      try {
+        await fetch(`/api/photos/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isFeatured: newValue }),
+        });
+      } catch {
+        // Revert on error
+        setPhotos((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, isFeatured: photo.isFeatured } : p))
+        );
+      }
+    },
+    [photos]
+  );
+
   if (photos.length === 0) {
     return (
       <div className="bg-surface rounded-lg border border-border p-12 text-center">
@@ -160,9 +204,14 @@ export default function PhotosGrid({ initialPhotos }: { initialPhotos: Photo[] }
   return (
     <>
       {/* Status bar */}
-      <div className="flex items-center gap-2 mb-4 text-xs text-muted">
-        <GripVertical className="w-3.5 h-3.5" />
-        <span>Drag to reorder</span>
+      <div className="flex items-center flex-wrap gap-x-3 gap-y-1 mb-4 text-xs text-muted">
+        <span className="flex items-center gap-1">
+          <GripVertical className="w-3.5 h-3.5" /> Drag to reorder
+        </span>
+        <span className="text-dim">·</span>
+        <span className="flex items-center gap-1">
+          <House className="w-3.5 h-3.5" /> Click &quot;+ Home&quot; to show a photo on the home page
+        </span>
         {saving && (
           <span className="flex items-center gap-1 text-accent ml-2">
             <Loader2 className="w-3 h-3 animate-spin" /> Saving...
@@ -179,7 +228,11 @@ export default function PhotosGrid({ initialPhotos }: { initialPhotos: Photo[] }
         <SortableContext items={photos.map((p) => p.id)} strategy={rectSortingStrategy}>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
             {photos.map((photo) => (
-              <SortablePhoto key={photo.id} photo={photo} />
+              <SortablePhoto
+                key={photo.id}
+                photo={photo}
+                onToggleHomePage={handleToggleHomePage}
+              />
             ))}
           </div>
         </SortableContext>

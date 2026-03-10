@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Masonry from "react-masonry-css";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import PhotoLightbox from "./PhotoLightbox";
@@ -42,51 +42,47 @@ export default function PhotoGrid({
     <>
       <Masonry
         breakpointCols={breakpointCols[columns]}
-        className={cn("flex gap-4", className)}
-        columnClassName="flex flex-col gap-4"
+        className={cn("flex -mx-2", className)}
+        columnClassName="px-2"
       >
-        <AnimatePresence mode="popLayout">
-          {photos.map((photo, index) => (
-            <motion.div
-              key={photo.id}
-              layout
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="group cursor-pointer"
-              onClick={() => setLightboxIndex(index)}
-            >
-              <div className="relative overflow-hidden rounded-sm">
-                <Image
-                  src={photo.thumbnailUrl || photo.url}
-                  alt={photo.description || photo.title || "Portfolio photo"}
-                  width={photo.width}
-                  height={photo.height}
-                  className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  placeholder={photo.blurDataUrl ? "blur" : undefined}
-                  blurDataURL={photo.blurDataUrl || undefined}
-                />
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                  <div>
-                    {photo.title && (
-                      <p className="text-foreground text-sm font-medium">
-                        {photo.title}
-                      </p>
-                    )}
-                    {photo.category && (
-                      <p className="text-accent text-xs uppercase tracking-wider">
-                        {photo.category.name}
-                      </p>
-                    )}
-                  </div>
+        {photos.map((photo, index) => (
+          <motion.div
+            key={photo.id}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: index * 0.05 }}
+            className="mb-4 group cursor-pointer"
+            onClick={() => setLightboxIndex(index)}
+          >
+            <div className="relative overflow-hidden rounded-sm">
+              <Image
+                src={photo.thumbnailUrl || photo.url}
+                alt={photo.description || photo.title || "Portfolio photo"}
+                width={photo.width}
+                height={photo.height}
+                className="w-full h-auto transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                placeholder={photo.blurDataUrl ? "blur" : undefined}
+                blurDataURL={photo.blurDataUrl || undefined}
+              />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                <div>
+                  {photo.title && (
+                    <p className="text-foreground text-sm font-medium">
+                      {photo.title}
+                    </p>
+                  )}
+                  {photo.category && (
+                    <p className="text-accent text-xs uppercase tracking-wider">
+                      {photo.category.name}
+                    </p>
+                  )}
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+            </div>
+          </motion.div>
+        ))}
       </Masonry>
 
       {lightboxIndex !== null && (
