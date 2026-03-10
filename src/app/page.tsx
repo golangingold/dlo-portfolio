@@ -107,9 +107,6 @@ export default async function HomePage() {
                 <h3 className="font-display text-sm uppercase tracking-[0.2em] text-accent mb-4">
                   About
                 </h3>
-                <h2 className="font-display text-3xl md:text-4xl tracking-wider mb-6">
-                  {about.headline || "Model. San Francisco."}
-                </h2>
                 <p className="text-muted leading-relaxed mb-8">
                   {about.shortBio || about.bio}
                 </p>
