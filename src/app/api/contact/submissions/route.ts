@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { contactSubmissionSchema } from "@/lib/validations";
+import nodemailer from "nodemailer";
 
 export async function GET() {
   try {
@@ -47,6 +48,33 @@ export async function POST(request: NextRequest) {
         message,
       },
     });
+
+    // Send email notification (fire-and-forget — don't fail the request if email fails)
+    if (process.env.GMAIL_APP_PASSWORD) {
+      try {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: "deangelo.bwell@gmail.com",
+            pass: process.env.GMAIL_APP_PASSWORD,
+          },
+        });
+        await transporter.sendMail({
+          from: '"DeAngelo Portfolio" <deangelo.bwell@gmail.com>',
+          to: "deangelo.bwell@gmail.com",
+          subject: `New contact message: ${subject || "(no subject)"}`,
+          text: `From: ${name} <${email}>\nSubject: ${subject || "(none)"}\n\n${message}`,
+          html: `
+            <p><strong>From:</strong> ${name} &lt;${email}&gt;</p>
+            <p><strong>Subject:</strong> ${subject || "(none)"}</p>
+            <hr />
+            <p style="white-space:pre-wrap">${message}</p>
+          `,
+        });
+      } catch (emailErr) {
+        console.error("Email notification failed:", emailErr);
+      }
+    }
 
     return NextResponse.json(submission, { status: 201 });
   } catch (error) {

@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from "react";
 import Link from "next/link";
-import { House, GripVertical, ImageOff, Plus, Loader2, Check } from "lucide-react";
+import { House, Star, GripVertical, ImageOff, Plus, Loader2, Check } from "lucide-react";
 import {
   DndContext,
   closestCenter,
@@ -30,6 +30,7 @@ interface Photo {
   thumbnailUrl: string | null;
   url: string;
   isFeatured: boolean;
+  isHero: boolean;
   isPublished: boolean;
   category: { name: string };
 }
@@ -38,11 +39,13 @@ function PhotoCard({
   photo,
   index,
   onToggleHomePage,
+  onSetHero,
   isDragging,
 }: {
   photo: Photo;
   index: number;
   onToggleHomePage?: (id: string) => void;
+  onSetHero?: (id: string) => void;
   isDragging?: boolean;
 }) {
   return (
@@ -60,9 +63,15 @@ function PhotoCard({
         <div className="absolute top-2 left-2 bg-black/70 text-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
           {index + 1}
         </div>
+        {/* Hero badge */}
+        {photo.isHero && (
+          <div className="absolute top-2 right-8 bg-yellow-500/90 rounded-full p-1" title="Hero background image">
+            <Star className="w-3 h-3 text-background fill-background" />
+          </div>
+        )}
         {/* Home page badge */}
         {photo.isFeatured && (
-          <div className="absolute top-2 right-2 bg-accent/90 rounded-full p-1" title="Shown on home page">
+          <div className="absolute top-2 right-2 bg-accent/90 rounded-full p-1" title="Shown in Selected Work">
             <House className="w-3 h-3 text-background fill-background" />
           </div>
         )}
@@ -85,15 +94,26 @@ function PhotoCard({
           >
             Edit
           </Link>
+          {onSetHero && (
+            <button
+              onClick={() => onSetHero(photo.id)}
+              className={`text-xs transition-colors ${
+                photo.isHero ? "text-yellow-400 hover:text-yellow-300" : "text-dim hover:text-muted"
+              }`}
+              title={photo.isHero ? "Currently the hero background" : "Set as hero background image"}
+            >
+              {photo.isHero ? "Hero" : "Hero?"}
+            </button>
+          )}
           {onToggleHomePage && (
             <button
               onClick={() => onToggleHomePage(photo.id)}
               className={`text-xs transition-colors ${
                 photo.isFeatured ? "text-accent hover:text-accent-light" : "text-dim hover:text-muted"
               }`}
-              title={photo.isFeatured ? "Remove from home page" : "Add to home page"}
+              title={photo.isFeatured ? "Remove from Selected Work" : "Add to Selected Work"}
             >
-              {photo.isFeatured ? "On Home" : "+ Home"}
+              {photo.isFeatured ? "Work" : "+ Work"}
             </button>
           )}
           <DeletePhotoButton photoId={photo.id} photoTitle={photo.title} />
@@ -107,10 +127,12 @@ function SortablePhoto({
   photo,
   index,
   onToggleHomePage,
+  onSetHero,
 }: {
   photo: Photo;
   index: number;
   onToggleHomePage: (id: string) => void;
+  onSetHero: (id: string) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: photo.id });
@@ -141,6 +163,7 @@ function SortablePhoto({
           photo={photo}
           index={index}
           onToggleHomePage={onToggleHomePage}
+          onSetHero={onSetHero}
           isDragging={isDragging}
         />
       </div>
@@ -221,6 +244,32 @@ export default function PhotosGrid({ initialPhotos }: { initialPhotos: Photo[] }
     [photos]
   );
 
+  const handleSetHero = useCallback(
+    async (id: string) => {
+      const photo = photos.find((p) => p.id === id);
+      if (!photo) return;
+      const newValue = !photo.isHero;
+
+      // Optimistic: only one hero at a time
+      setPhotos((prev) =>
+        prev.map((p) => ({ ...p, isHero: p.id === id ? newValue : false }))
+      );
+
+      try {
+        await fetch(`/api/photos/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ isHero: newValue }),
+        });
+      } catch {
+        setPhotos((prev) =>
+          prev.map((p) => (p.id === id ? { ...p, isHero: photo.isHero } : p))
+        );
+      }
+    },
+    [photos]
+  );
+
   if (photos.length === 0) {
     return (
       <div className="bg-surface rounded-lg border border-border p-12 text-center">
@@ -247,10 +296,12 @@ export default function PhotosGrid({ initialPhotos }: { initialPhotos: Photo[] }
         </span>
         <span className="text-dim">·</span>
         <span className="flex items-center gap-1">
-          <House className="w-3.5 h-3.5" /> Click &quot;+ Home&quot; to show on home page
+          <Star className="w-3.5 h-3.5 text-yellow-400" /> Hero? = main background image
         </span>
         <span className="text-dim">·</span>
-        <span>Numbers show sort order</span>
+        <span className="flex items-center gap-1">
+          <House className="w-3.5 h-3.5" /> + Work = Selected Work grid
+        </span>
         {saving && (
           <span className="flex items-center gap-1 text-accent ml-2">
             <Loader2 className="w-3 h-3 animate-spin" /> Saving...
@@ -277,6 +328,7 @@ export default function PhotosGrid({ initialPhotos }: { initialPhotos: Photo[] }
                 photo={photo}
                 index={index}
                 onToggleHomePage={handleToggleHomePage}
+                onSetHero={handleSetHero}
               />
             ))}
           </div>

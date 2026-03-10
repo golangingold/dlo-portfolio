@@ -13,6 +13,7 @@ interface Props {
     description: string;
     categoryId: string;
     isFeatured: boolean;
+    isHero: boolean;
     isPublished: boolean;
     url: string;
     thumbnailUrl: string | null;
@@ -28,6 +29,7 @@ export function EditPhotoForm({ photo, categories }: Props) {
     description: photo.description,
     categoryId: photo.categoryId,
     isFeatured: photo.isFeatured,
+    isHero: photo.isHero,
     isPublished: photo.isPublished,
   });
 
@@ -111,7 +113,16 @@ export function EditPhotoForm({ photo, categories }: Props) {
             </select>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 flex-wrap">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.isHero}
+                onChange={(e) => setForm({ ...form, isHero: e.target.checked })}
+                className="w-4 h-4 rounded border-border bg-surface-light text-accent"
+              />
+              <span className="text-sm text-foreground">Hero Background</span>
+            </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -119,7 +130,7 @@ export function EditPhotoForm({ photo, categories }: Props) {
                 onChange={(e) => setForm({ ...form, isFeatured: e.target.checked })}
                 className="w-4 h-4 rounded border-border bg-surface-light text-accent"
               />
-              <span className="text-sm text-foreground">Show on Home Page</span>
+              <span className="text-sm text-foreground">Selected Work</span>
             </label>
             <label className="flex items-center gap-2 cursor-pointer">
               <input

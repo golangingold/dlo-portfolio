@@ -34,6 +34,7 @@ export default async function AdminPhotosPage() {
           thumbnailUrl: p.thumbnailUrl,
           url: p.url,
           isFeatured: p.isFeatured,
+          isHero: p.isHero,
           isPublished: p.isPublished,
           category: { name: p.category.name },
         }))}

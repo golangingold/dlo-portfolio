@@ -40,11 +40,19 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { title, description, categoryId, isFeatured, isPublished } = body;
+    const { title, description, categoryId, isFeatured, isHero, isPublished } = body;
 
     const existing = await prisma.photo.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: "Photo not found" }, { status: 404 });
+    }
+
+    // Only one photo can be the hero — clear others first
+    if (isHero === true) {
+      await prisma.photo.updateMany({
+        where: { isHero: true, id: { not: id } },
+        data: { isHero: false },
+      });
     }
 
     const photo = await prisma.photo.update({
@@ -54,6 +62,7 @@ export async function PUT(
         ...(description !== undefined && { description }),
         ...(categoryId !== undefined && { categoryId }),
         ...(isFeatured !== undefined && { isFeatured }),
+        ...(isHero !== undefined && { isHero }),
         ...(isPublished !== undefined && { isPublished }),
       },
       include: { category: true },

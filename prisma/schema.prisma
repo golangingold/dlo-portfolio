@@ -41,6 +41,7 @@ model Photo {
   fileSize     Int?
   sortOrder    Int      @default(0)
   isFeatured   Boolean  @default(false)
+  isHero       Boolean  @default(false)
   isPublished  Boolean  @default(true)
   categoryId   String
   category     Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)

@@ -27,6 +27,7 @@ export default async function EditPhotoPage({
         description: photo.description || "",
         categoryId: photo.categoryId,
         isFeatured: photo.isFeatured,
+        isHero: photo.isHero,
         isPublished: photo.isPublished,
         url: photo.url,
         thumbnailUrl: photo.thumbnailUrl,

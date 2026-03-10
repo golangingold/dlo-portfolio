@@ -12,23 +12,21 @@ import { ArrowRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 async function getHomeData() {
-  const [settings, about, featuredPhotos, primaryReel, contactInfo] =
+  const [settings, about, heroPhoto, featuredPhotos, primaryReel, contactInfo] =
     await Promise.all([
       prisma.siteSettings.findFirst(),
       prisma.about.findFirst(),
+      // The one photo used as the full-screen hero background
+      prisma.photo.findFirst({
+        where: { isHero: true, isPublished: true },
+        orderBy: { sortOrder: "asc" },
+      }),
+      // Photos shown in the "Selected Work" grid
       prisma.photo.findMany({
         where: { isFeatured: true, isPublished: true },
         include: { category: true },
         orderBy: { sortOrder: "asc" },
         take: 6,
-      }).then(async (featured) => {
-        if (featured.length > 0) return featured;
-        return prisma.photo.findMany({
-          where: { isPublished: true },
-          include: { category: true },
-          orderBy: { sortOrder: "asc" },
-          take: 6,
-        });
       }),
       prisma.demoReel.findFirst({
         where: { isPrimary: true, isPublished: true },
@@ -36,11 +34,11 @@ async function getHomeData() {
       prisma.contactInfo.findFirst(),
     ]);
 
-  return { settings, about, featuredPhotos, primaryReel, contactInfo };
+  return { settings, about, heroPhoto, featuredPhotos, primaryReel, contactInfo };
 }
 
 export default async function HomePage() {
-  const { settings, about, featuredPhotos, primaryReel, contactInfo } =
+  const { settings, about, heroPhoto, featuredPhotos, primaryReel, contactInfo } =
     await getHomeData();
 
   return (
@@ -51,8 +49,8 @@ export default async function HomePage() {
       <HeroSection
         title={settings?.heroTitle || "DEANGELO"}
         subtitle={settings?.heroSubtitle || "Model | San Francisco"}
-        featuredPhoto={featuredPhotos[0]?.url}
-        blurDataUrl={featuredPhotos[0]?.blurDataUrl}
+        featuredPhoto={heroPhoto?.url}
+        blurDataUrl={heroPhoto?.blurDataUrl}
       />
 
       {/* Featured Work */}

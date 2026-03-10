@@ -1,11 +1,7 @@
 import Link from "next/link";
-import { Instagram, Twitter, Film, Linkedin } from "lucide-react";
+import { Instagram, Linkedin } from "lucide-react";
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
   return (
     <footer className="border-t border-border/50 bg-background">
       <div className="mx-auto max-w-7xl px-6 py-12">
@@ -26,20 +22,6 @@ export default function Footer() {
               aria-label="Instagram"
             >
               <Instagram size={18} />
-            </a>
-            <a
-              href="#"
-              className="text-muted hover:text-accent transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter size={18} />
-            </a>
-            <a
-              href="#"
-              className="text-muted hover:text-accent transition-colors"
-              aria-label="IMDb"
-            >
-              <Film size={18} />
             </a>
             <a
               href="#"
