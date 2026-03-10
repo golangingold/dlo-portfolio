@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Masonry from "react-masonry-css";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,12 @@ interface PhotoGridProps {
   columns?: 2 | 3 | 4;
 }
 
+const breakpointCols = {
+  2: { default: 2, 640: 1 },
+  3: { default: 3, 1024: 3, 640: 2, 0: 1 },
+  4: { default: 4, 1280: 4, 1024: 3, 640: 2, 0: 1 },
+};
+
 export default function PhotoGrid({
   photos,
   className,
@@ -31,15 +38,13 @@ export default function PhotoGrid({
 }: PhotoGridProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const colClasses = {
-    2: "columns-1 sm:columns-2",
-    3: "columns-1 sm:columns-2 lg:columns-3",
-    4: "columns-1 sm:columns-2 lg:columns-3 xl:columns-4",
-  };
-
   return (
     <>
-      <div className={cn(colClasses[columns], "gap-4", className)}>
+      <Masonry
+        breakpointCols={breakpointCols[columns]}
+        className={cn("flex gap-4", className)}
+        columnClassName="flex flex-col gap-4"
+      >
         <AnimatePresence mode="popLayout">
           {photos.map((photo, index) => (
             <motion.div
@@ -49,7 +54,7 @@ export default function PhotoGrid({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.4, delay: index * 0.05 }}
-              className="mb-4 break-inside-avoid group cursor-pointer"
+              className="group cursor-pointer"
               onClick={() => setLightboxIndex(index)}
             >
               <div className="relative overflow-hidden rounded-sm">
@@ -82,7 +87,7 @@ export default function PhotoGrid({
             </motion.div>
           ))}
         </AnimatePresence>
-      </div>
+      </Masonry>
 
       {lightboxIndex !== null && (
         <PhotoLightbox
