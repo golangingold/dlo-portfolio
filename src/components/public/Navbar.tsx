@@ -54,7 +54,7 @@ export default function Navbar() {
                   "relative text-sm uppercase tracking-[0.15em] transition-colors",
                   pathname === link.href
                     ? "text-accent"
-                    : "text-muted hover:text-foreground"
+                    : "text-foreground hover:text-accent"
                 )}
               >
                 {link.label}
