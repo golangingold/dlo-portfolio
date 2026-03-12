@@ -107,19 +107,9 @@ export default async function HomePage() {
                 <h3 className="font-display text-sm uppercase tracking-[0.2em] text-accent mb-4">
                   About
                 </h3>
-                <p className="text-muted leading-relaxed mb-8">
-                  {about.shortBio || about.bio}
+                <p className="text-muted leading-relaxed">
+                  {about.bio}
                 </p>
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 text-accent text-sm uppercase tracking-[0.15em] hover:text-accent-light transition-colors group"
-                >
-                  Read More
-                  <ArrowRight
-                    size={16}
-                    className="group-hover:translate-x-1 transition-transform"
-                  />
-                </Link>
               </RevealOnScroll>
             </div>
           </div>

@@ -7,7 +7,6 @@ export const siteConfig = {
   navLinks: [
     { label: "Home", href: "/" },
     { label: "Gallery", href: "/gallery" },
-    { label: "About", href: "/about" },
     { label: "Comp Card", href: "/comp-card" },
     { label: "Contact", href: "/contact" },
   ],
